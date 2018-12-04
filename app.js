@@ -7,6 +7,7 @@ var calculadoraNextU = {
 	valordos: 0,
 	valortres: 0,
   resultado: 0,
+	aTeclaIgual: false,
 
 	init: (function(){
 		this.formatearBotones(".tecla");
@@ -20,7 +21,7 @@ var calculadoraNextU = {
 		var z = document.querySelectorAll(selector);
 		for (var i = 0; i < z.lenght; i++) {
 			z[i].onmouseover = this.achicarBoton;
-			z[i].onmouseout = this.agrandaBoton;
+			z[i].onmouseleave = this.agrandaBoton;
 		};
 	},
 
@@ -36,22 +37,25 @@ var calculadoraNextU = {
 	// Formatear Botones - reduce
 	reduceBoton: function(elemento){
 		var z = elemento.id;
-		if (z == "1" || z == "2" || z == "3" || z == "0" || z == "igual" || z == "punto"){
+		if (z=="1" || z=="2" || z=="3" || z=="0" || z=="igual" || z=="punto"){
 			elemento.style.width = "25%";
 			elemento.style.height = "59px";
+			elemento.style.background = red;
 		}else if(z == "mas"){
 			elemento.style.width = "85%";
 			elemento.style.height = "95%";
+			elemento.style.background = red;
 		}else{
 			elemento.style.width = "20%";
 			elemento.style.height = "61px";
+			elemento.style.background = red;
 		}
 	},
 
  // Formatear Botones - Aumenta
  retornaBoton: function(elemento){
  var z = elemento.id;
- if (z == "1" || z == "2" || z == "3" || z == "0" || z == "igual" || z == "punto"){
+ if (z=="1" || z=="2" || z=="3" || z=="0" || z=="igual" || z=="punto"){
 	 elemento.style.width = "29%";
 	 elemento.style.height = "63px";
  }else if(z == "mas"){
@@ -94,33 +98,32 @@ eventosFuncionCalculadora: function(){
 	document.getElementById("igual").addEventListener("click", function(){
 		calculadoraNextU.mostrarResultado();});
 	document.getElementById("raiz").addEventListener("click", function(){
-		calculadoraNextU.operacion("raiz");});
+		calculadoraNextU.calculoOperacion("raiz");});
 	document.getElementById("dividido").addEventListener("click", function(){
-		calculadoraNextU.operacion("/");});
+		calculadoraNextU.calculoOperacion("/");});
 	document.getElementById("por").addEventListener("click", function(){
-		calculadoraNextU.operacion("*");});
+		calculadoraNextU.calculoOperacion("*");});
 	document.getElementById("menos").addEventListener("click", function(){
-		calculadoraNextU.operacion("-");});
+		calculadoraNextU.calculoOperacion("-");});
 	document.getElementById("mas").addEventListener("click", function(){
-		calculadoraNextU.operacion("+");});
+		calculadoraNextU.calculoOperacion("+");});
 },
 
-
 numeroIngresado: function(valorgral){
-  if (this.pantalla.length < 8){
-		if (this.pantalla == "0"){
-			this.pantalla = "";
-			this.pantalla = this.pantalla + valorgral;
+  if (this.valPantalla.length < 8){
+		if (this.valPantalla == "0"){
+			this.valPantalla = "";
+			this.valPantalla = this.valPantalla + valorgral;
 		}else {
-			this.pantalla = this.pantalla + valorgral;
-		}
+	    this.valPantalla = this.valPantalla + valorgral;
+  }
 		this.cierrePantalla();
 	}
 },
 
 cierrePantalla: function(){
 	this.pantalla.innerHTML = this.valPantalla;
-}
+},
 
 // Funciones de Teclas de la calculadora
 borrarPantalla: function(){
@@ -160,7 +163,7 @@ decimal: function(){
 	}
 },
 
-operacion: function(oper){
+calculoOperacion: function(oper){
 	this.valoruno = parseFloat(this.valPantalla);
 	this.valPantalla = "";
 	this.operar = oper;
@@ -174,10 +177,10 @@ mostrarResultado: function(){
 		this.valordos = parseFloat(this.valPantalla);
 		this.valortres = this.valordos;
 // calculamos el Resultado
-this.operacion(this.valoruno, this.valordos, this.operar);
+this.calcularOperacion(this.valoruno, this.valordos, this.operar);
 }else{ //siguiente ves que se presiona igual
 	//calculamos el resultado
-	this.operacion(this.valoruno, this.valordos, this.operar);
+	this.calcularOperacion(this.valoruno, this.valordos, this.operar);
 }
 //almacenamos el resultado como primer valor para poder seguir operando
 this.valoruno = this.resultado;
@@ -190,9 +193,28 @@ if(this.resultado.toString().length < 9){
 }	else{
 	this.valPantalla = this.resultado.toString().slice(0,8);
 }
+this.aTeclaIgual = true;
+this.cierrePantalla();
+},
 
-}
-
+ calcularOperacion: function(valoruno, valordos, operar){
+	 switch (operar) {
+	 	case "+":
+			this.resultado = eval(valoruno + valordos);
+	 	break;
+		case "-":
+		  this.resultado = eval(valoruno - valordos);
+		break;
+		case "*":
+			this.resultado = eval(valoruno * valordos);
+		break;
+		case "/":
+		  this.resultado = eval(valoruno / valordos);
+		break;
+		case "raiz":
+		  this.resultado = eval(Math.sqrt(valoruno));
+    }
+ },
 };
 
 calculadoraNextU.init();
