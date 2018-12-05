@@ -14,60 +14,7 @@ var calculadoraNextU = {
 		this.eventosFuncionCalculadora();
 	}),
 
-	//Dar formato a Botones -- Agrandamos y achicamos de acuerdo al los eventos
-	//de desplazamiento de mouse
-
-	formatearBotones: function(selector){
-		var z = document.querySelectorAll(selector);
-		for (var i = 0; i < z.lenght; i++) {
-			z[i].onmouseover = this.achicarBoton;
-			z[i].onmouseleave = this.agrandaBoton;
-		};
-	},
-
-	//Evento para achicar el botón donde posamos el mouse
-	achicarBoton: function(event){
-		calculadoraNextU.reduceBoton(event.target);
-	},
-
-	agrandaBoton: function(event){
-		calculadoraNextU.retornaBoton(event.target);
-	},
-
-	// Formatear Botones - reduce
-	reduceBoton: function(elemento){
-		var z = elemento.id;
-		if (z=="1" || z=="2" || z=="3" || z=="0" || z=="igual" || z=="punto"){
-			elemento.style.width = "25%";
-			elemento.style.height = "59px";
-			elemento.style.background = red;
-		}else if(z == "mas"){
-			elemento.style.width = "85%";
-			elemento.style.height = "95%";
-			elemento.style.background = red;
-		}else{
-			elemento.style.width = "20%";
-			elemento.style.height = "61px";
-			elemento.style.background = red;
-		}
-	},
-
- // Formatear Botones - Aumenta
- retornaBoton: function(elemento){
- var z = elemento.id;
- if (z=="1" || z=="2" || z=="3" || z=="0" || z=="igual" || z=="punto"){
-	 elemento.style.width = "29%";
-	 elemento.style.height = "63px";
- }else if(z == "mas"){
-	 elemento.style.width = "90%";
-	 elemento.style.height = "100%";
- }else{
-	 elemento.style.width = "22%";
-	 elemento.style.height = "63px";
- }
-},
-
-// Funcion de calculadora
+	// Funcion de calculadora
 eventosFuncionCalculadora: function(){
 	document.getElementById("0").addEventListener("click", function(){
 		calculadoraNextU.numeroIngresado("0");});
@@ -97,8 +44,6 @@ eventosFuncionCalculadora: function(){
 		calculadoraNextU.decimal();});
 	document.getElementById("igual").addEventListener("click", function(){
 		calculadoraNextU.mostrarResultado();});
-	document.getElementById("raiz").addEventListener("click", function(){
-		calculadoraNextU.calculoOperacion("raiz");});
 	document.getElementById("dividido").addEventListener("click", function(){
 		calculadoraNextU.calculoOperacion("/");});
 	document.getElementById("por").addEventListener("click", function(){
@@ -141,8 +86,8 @@ borrarPantalla: function(){
 cambioSigno: function(){
 	if (this.valPantalla !="0"){
 		var xau;
-		if (this.valPantalla.charAt(0) == "-"){
-			xau = this.valPantalla.slice(1);
+		if (this.valPantalla.charAt(0) == "-"){// obtengo el índice del caracter "-"
+			xau = this.valPantalla.slice(1); //el menos se coloca como primer elemento del vector
 		}else{
 			xau = "-" + this.valPantalla;
 		}
@@ -210,10 +155,53 @@ this.cierrePantalla();
 		break;
 		case "/":
 		  this.resultado = eval(valoruno / valordos);
-		break;
-		case "raiz":
-		  this.resultado = eval(Math.sqrt(valoruno));
-    }
+		}
+ },
+
+ formatearBotones: function(selector){
+	 var y = document.querySelectorAll(selector);
+	 for (var i = 0; i<y.length;i++) {
+		 y[i].onmouseover = this.achicarBoton;
+		 y[i].onmouseout = this.regresaBoton;
+	 };
+ },
+
+ achicarBoton: function(event){
+	 calculadoraNextU.achicaBoton(event.target);
+ },
+
+ regresaBoton: function(event){
+	 calculadoraNextU.regresarBoton(event.target);
+ },
+
+ //Formato de botones
+
+ achicaBoton: function(elemento){
+	 var y = elemento.id;
+	 if (y=="1" || y=="2" || y=="3" || y=="0" || y=="igual" || y=="punto" ) {
+		 elemento.style.width = "28%";
+		 elemento.style.height = "62px";
+	 } else if(y=="mas") { //se da formato a la tecla "+"
+		 elemento.style.width = "88%";
+		 elemento.style.height = "98%";
+	 } else {// formatea el resto de las teclas no contempladas en el if - else if
+	 elemento.style.width = "21%";
+	 elemento.style.height = "62px";
+	 }
+ },
+
+ regresarBoton: function(elemento){
+	 var y = elemento.id;
+	 if (y=="1" || y=="2" || y=="3" || y=="0" || y=="igual" || y=="punto" ) {
+		 elemento.style.width = "29%";
+		 elemento.style.height = "62.91px";
+	 } else if(y=="mas") { //se da formato a la tecla "+"
+		 elemento.style.width = "90%";
+		 elemento.style.height = "100%";
+	 } else {// formatea el resto de las teclas no contempladas en el if - else if
+	 elemento.style.width = "22%";
+	 elemento.style.height = "62.91px";
+	 }
  },
 };
 
